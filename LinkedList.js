@@ -1,13 +1,13 @@
 // Necessary Imports (you will need to use this)
-const { Student } = require('./Student')
+const { Student } = require("./Student");
 
 /**
  * Node Class (GIVEN, you will need to use this)
  */
 class Node {
   // Public Fields
-  data               // Student
-  next               // Object
+  data; // Student
+  next; // Object
   /**
    * REQUIRES:  The fields specified above
    * EFFECTS:   Creates a new Node instance
@@ -15,7 +15,7 @@ class Node {
    */
   constructor(data, next = null) {
     this.data = data;
-    this.next = next
+    this.next = next;
   }
 }
 
@@ -26,9 +26,9 @@ class Node {
  */
 class LinkedList {
   // Public Fields
-  head              // Object
-  tail              // Object
-  length            // Number representing size of LinkedList
+  head; // Object
+  tail; // Object
+  length; // Number representing size of LinkedList
 
   /**
    * REQUIRES:  None
@@ -70,7 +70,7 @@ class LinkedList {
    */
   findStudent(email) {
     // TODO
-    return -1
+    return -1;
   }
 
   /**
@@ -78,7 +78,7 @@ class LinkedList {
    * EFFECTS:   Clears all students from the Linked List
    * RETURNS:   None
    */
-  #clearStudents() {
+  clearStudents() {
     // TODO
   }
 
@@ -118,13 +118,13 @@ class LinkedList {
   }
 
   /**
-   * REQUIRES:  minAge (Number)
+   * REQUIRES:  minYear (Number)
    * EFFECTS:   None
    * RETURNS:   An array of students who are at least minAge, sorted alphabetically by student name
    * CONSIDERATIONS:
    * - Use sortStudentsByName()
    */
-  filterByMinAge(minAge) {
+  filterByMinYear(minYear) {
     // TODO
     return [];
   }
@@ -148,7 +148,6 @@ class LinkedList {
   async loadFromJSON(fileName) {
     // TODO
   }
-
 }
 
-module.exports = { LinkedList }
+module.exports = { LinkedList };
