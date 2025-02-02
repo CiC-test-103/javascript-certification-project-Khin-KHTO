@@ -2,6 +2,7 @@
 const { LinkedList } = require("./LinkedList");
 const { Student } = require("./Student");
 const readline = require("readline");
+const fr = require("fs").promises;
 
 // Initialize terminal interface
 const rl = readline.createInterface({
@@ -48,6 +49,10 @@ async function handleCommand(command) {
       const [name, year, email, specialization] = args;
       // --------> WRITE YOUR CODE BELOW
 
+      const newStudent = new Student(name, Number(year), email, specialization);
+      studentManagementSystem.addStudent(newStudent);
+      console.log(`${name} is successfully added to the student list.`);
+
       // --------> WRITE YOUR CODE ABOVE
       break;
 
@@ -63,6 +68,19 @@ async function handleCommand(command) {
       console.log("Removing student...");
       // --------> WRITE YOUR CODE BELOW
 
+      const removeEmail = args[0];
+
+      const studentToRemove = studentManagementSystem.findStudent(removeEmail);
+
+      if (studentToRemove === -1) {
+        console.log("Student does not exist.");
+      } else {
+        studentManagementSystem.removeStudent(removeEmail);
+        console.log(
+          `${studentToRemove.getName()} is successfully removed from the student list.`
+        );
+      }
+
       // --------> WRITE YOUR CODE ABOVE
       break;
 
@@ -75,6 +93,9 @@ async function handleCommand(command) {
        */
       console.log("Displaying students...");
       // --------> WRITE YOUR CODE BELOW
+
+      const studentList = studentManagementSystem.displayStudents();
+      console.log(studentList || "No students found.");
 
       // --------> WRITE YOUR CODE ABOVE
       break;
@@ -92,6 +113,19 @@ async function handleCommand(command) {
       console.log("Finding student...");
       // --------> WRITE YOUR CODE BELOW
 
+      const findEmail = args[0];
+
+      const foundStudent = studentManagementSystem.findStudent(findEmail);
+      if (foundStudent !== -1) {
+        console.log("Student found:");
+        console.log(`Name: ${foundStudent.getName()}`);
+        console.log(`Year: ${foundStudent.getYear()}`);
+        console.log(`Email: ${foundStudent.getEmail()}`);
+        console.log(`Specialization: ${foundStudent.getSpecialization()}`);
+      } else {
+        console.log("Student does not exist.");
+      }
+
       // --------> WRITE YOUR CODE ABOVE
       break;
 
@@ -105,11 +139,16 @@ async function handleCommand(command) {
        *   - Use implemented functions in LinkedList to save the data
        */
       console.log("Saving data...");
+
+      const saveFile = args[0];
+
+      await studentManagementSystem.saveToJson(saveFile);
+      console.log(`Data saved to ${saveFile}`);
       break;
 
-    // --------> WRITE YOUR CODE BELOW
-
     // --------> WRITE YOUR CODE ABOVE
+
+    // --------> WRITE YOUR CODE BELOW
 
     case "load":
       /**
@@ -122,6 +161,11 @@ async function handleCommand(command) {
        */
       console.log("Loading data...");
       // --------> WRITE YOUR CODE BELOW
+
+      const loadFile = args[0];
+
+      await studentManagementSystem.loadFromJSON(loadFile);
+      console.log(`Data loaded from ${loadFile}`);
 
       // --------> WRITE YOUR CODE ABOVE
       break;
@@ -136,6 +180,9 @@ async function handleCommand(command) {
        */
       console.log("Clearing data...");
       // --------> WRITE YOUR CODE BELOW
+
+      studentManagementSystem.clearStudents();
+      console.log("All students have been removed.");
 
       // --------> WRITE YOUR CODE ABOVE
       break;

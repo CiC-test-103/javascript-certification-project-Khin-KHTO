@@ -95,7 +95,6 @@ class LinkedList {
       current.next = current.next.next;
       if (!current.next) this.tail = current;
       this.length--;
-      return temp.date;
     }
   }
 
