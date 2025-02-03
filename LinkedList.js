@@ -1,6 +1,5 @@
 // Necessary Imports (you will need to use this)
 const { Student } = require("./Student");
-
 const fs = require("fs").promises;
 
 /**
@@ -220,21 +219,44 @@ class LinkedList {
 
   async saveToJson(fileName) {
     // TODO
-    const students = [];
-    let current = this.head;
+    try {
+      let existingStudents = [];
+    
+      try {
+        const data = await fs.readFile(fileName, "utf-8");
+        existingStudents = JSON.parse(data);
+      } catch (error) {
+        if (error.code !== "ENOENT") {
+          console.error("File Error:", error);
+          return;
+        }
+      }
+      
+      const students = [];
+      let current = this.head;
 
-    while (current) {
+      while (current) {
+      const isDuplicate = existingStudents.some((s)=> s.email === current.data.getEmail());
+      
+      if (!isDuplicate) {
       students.push({
         name: current.data.getName(),
         year: current.data.getYear(),
         email: current.data.getEmail(),
         specialization: current.data.getSpecialization(),
       });
-      current = current.next;
     }
 
-    await fs.writeFile(fileName, JSON.stringify(students, null, 2));
+    current = current.next;
   }
+    const updateStudents = [...existingStudents, ...students];
+
+    await fs.writeFile(fileName, JSON.stringify(updateStudents, null, 2));
+    console.log(`Students data updated to ${fileName}`);
+  } catch (error) {
+    console.error("Error saving data:", error);
+  }
+}
 
   /**
    * REQUIRES:  A valid file name (String) that exists
@@ -246,6 +268,7 @@ class LinkedList {
 
   async loadFromJSON(fileName) {
     // TODO
+    try {
     const data = await fs.readFile(fileName, "utf-8");
     const students = JSON.parse(data);
 
@@ -260,6 +283,14 @@ class LinkedList {
       );
       this.addStudent(student);
     });
+    console.log(`Data sucessfully loaded from ${fileName}`);
+  } catch (error) {
+    if(error.code === "ENOENT") {
+      console.log(`${fileName} is not found. No data loaded`);
+    } else {
+      console.error("Error loading data:", error);
+    }
   }
+}
 }
 module.exports = { LinkedList };
