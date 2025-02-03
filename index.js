@@ -2,7 +2,6 @@
 const { LinkedList } = require("./LinkedList");
 const { Student } = require("./Student");
 const readline = require("readline");
-const fr = require("fs").promises;
 
 // Initialize terminal interface
 const rl = readline.createInterface({
@@ -73,14 +72,15 @@ async function handleCommand(command) {
       const studentToRemove = studentManagementSystem.findStudent(removeEmail);
 
       if (studentToRemove === -1) {
-        console.log("Student does not exist.");
+        console.log(
+          `Student does not exist, email ${removeEmail} was not found.`
+        );
       } else {
         studentManagementSystem.removeStudent(removeEmail);
         console.log(
-          `${studentToRemove.getName()} is successfully removed from the student list.`
+          `Removed student: ${studentToRemove.getName()} (${removeEmail})`
         );
       }
-
       // --------> WRITE YOUR CODE ABOVE
       break;
 
@@ -94,8 +94,7 @@ async function handleCommand(command) {
       console.log("Displaying students...");
       // --------> WRITE YOUR CODE BELOW
 
-      const studentList = studentManagementSystem.displayStudents();
-      console.log(studentList || "No students found.");
+      console.log("Students: ", studentManagementSystem.displayStudents());
 
       // --------> WRITE YOUR CODE ABOVE
       break;
@@ -114,8 +113,8 @@ async function handleCommand(command) {
       // --------> WRITE YOUR CODE BELOW
 
       const findEmail = args[0];
-
       const foundStudent = studentManagementSystem.findStudent(findEmail);
+
       if (foundStudent !== -1) {
         console.log("Student found:");
         console.log(`Name: ${foundStudent.getName()}`);

@@ -62,7 +62,6 @@ class LinkedList {
       this.tail.next = newNode;
       this.tail = newNode;
     }
-
     this.length++;
   }
   /**
@@ -76,7 +75,6 @@ class LinkedList {
   removeStudent(email) {
     // TODO
     if (!this.head) return;
-
     if (this.head.data.getEmail() === email) {
       this.head = this.head.next;
       if (!this.head) this.tail = null;
@@ -88,7 +86,6 @@ class LinkedList {
     while (current.next && current.next.data.getEmail() !== email) {
       current = current.next;
     }
-
     if (current.next) {
       let temp = current.next;
       current.next = current.next.next;
@@ -136,12 +133,12 @@ class LinkedList {
    */
   displayStudents() {
     // TODO
+    if (!this.head) return "No students found";
+
     let students = [];
     let current = this.head;
     while (current) {
-      if (current.data) {
-        students.push(current.data.getName());
-      }
+      students.push(current.data.getName());
       current = current.next;
     }
     return students.join(", ");
@@ -220,43 +217,26 @@ class LinkedList {
   async saveToJson(fileName) {
     // TODO
     try {
-      let existingStudents = [];
-    
-      try {
-        const data = await fs.readFile(fileName, "utf-8");
-        existingStudents = JSON.parse(data);
-      } catch (error) {
-        if (error.code !== "ENOENT") {
-          console.error("File Error:", error);
-          return;
-        }
-      }
-      
       const students = [];
       let current = this.head;
 
       while (current) {
-      const isDuplicate = existingStudents.some((s)=> s.email === current.data.getEmail());
-      
-      if (!isDuplicate) {
-      students.push({
-        name: current.data.getName(),
-        year: current.data.getYear(),
-        email: current.data.getEmail(),
-        specialization: current.data.getSpecialization(),
-      });
+        students.push({
+          name: current.data.getName(),
+          year: current.data.getYear(),
+          email: current.data.getEmail(),
+          specialization: current.data.getSpecialization(),
+        });
+
+        current = current.next;
+      }
+
+      await fs.writeFile(fileName, JSON.stringify(students, null, 2));
+      console.log(`Data successfully saved to ${fileName}`);
+    } catch (error) {
+      console.error("Error saving data:", error);
     }
-
-    current = current.next;
   }
-    const updateStudents = [...existingStudents, ...students];
-
-    await fs.writeFile(fileName, JSON.stringify(updateStudents, null, 2));
-    console.log(`Students data updated to ${fileName}`);
-  } catch (error) {
-    console.error("Error saving data:", error);
-  }
-}
 
   /**
    * REQUIRES:  A valid file name (String) that exists
@@ -269,28 +249,25 @@ class LinkedList {
   async loadFromJSON(fileName) {
     // TODO
     try {
-    const data = await fs.readFile(fileName, "utf-8");
-    const students = JSON.parse(data);
+      const data = await fs.readFile(fileName, "utf-8");
+      const students = JSON.parse(data);
 
-    this.clearStudents();
+      this.clearStudents();
 
-    students.forEach((studentData) => {
-      const student = new Student(
-        studentData.name,
-        studentData.year,
-        studentData.email,
-        studentData.specialization
-      );
-      this.addStudent(student);
-    });
-    console.log(`Data sucessfully loaded from ${fileName}`);
-  } catch (error) {
-    if(error.code === "ENOENT") {
-      console.log(`${fileName} is not found. No data loaded`);
-    } else {
+      students.forEach((studentData) => {
+        const student = new Student(
+          studentData.name,
+          studentData.year,
+          studentData.email,
+          studentData.specialization
+        );
+        this.addStudent(student);
+      });
+
+      console.log(`Successfully loaded ${students.length} students.`);
+    } catch (error) {
       console.error("Error loading data:", error);
     }
   }
-}
 }
 module.exports = { LinkedList };
