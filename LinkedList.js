@@ -87,7 +87,6 @@ class LinkedList {
       current = current.next;
     }
     if (current.next) {
-      let temp = current.next;
       current.next = current.next.next;
       if (!current.next) this.tail = current;
       this.length--;
