@@ -2,7 +2,8 @@
   {
     "name": "AliceJohnson",
     "year": 2,
-    "email": "alice.johnson@gmail.com"
+    "email": "alice.johnson@gmail.com",
+    "specialization": "computerScience"
   },
   {
     "name": "BobSmith",
